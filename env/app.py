@@ -291,12 +291,15 @@ class Comentario(db.Model):
 
 #############ROTAS##################
 
-@app.route('/atividades', methods=['GET'])
+
+######################################################################
+
+@app.route('/api/atividades', methods=['GET'])
 def get_atividades():
     atividades = Atividades.query.all()
     return jsonify([atividade.to_dict() for atividade in atividades])
 
-@app.route('/atividades/<int:id>', methods=['GET'])
+@app.route('/api/atividades/<int:id>', methods=['GET'])
 def get_atividade(id):
     atividade = Atividades.query.get(id)
     if atividade is None:
@@ -365,8 +368,69 @@ def update_atividade(id):
     return jsonify(atividade.to_dict()), 200
 
 
+
+
+@app.route('/api/pontos_turisticos', methods=['GET'])
+def get_pontos_turisticos():
+    pontos_turisticos = PontoTuristico.query.all()
+    return jsonify([ponto_turistico.to_dict() for ponto_turistico in pontos_turisticos])
+
+@app.route('/api/pontos_turisticos/<int:id>', methods=['GET'])
+def get_pontos_turisticos(id):
+    ponto_turistico = PontoTuristico.query.get(id)
+    if ponto_turistico is None:
+        return jsonify({'erro': 'Ponto turístico não encontrada'}), 404
+    return jsonify(ponto_turistico.to_dict())
+
+
+
+@app.route('/api/hospedagens', methods=['GET'])
+def get_hospedagens():
+    hospedagens = Hospedagem.query.all()
+    return jsonify([hospedagem.to_dict() for hospedagem in hospedagens])
+
+@app.route('/api/hospedagens/<int:id>', methods=['GET'])
+def get_hospedagens(id):
+    hospedagem = Hospedagem.query.get(id)
+    if hospedagem is None:
+        return jsonify({'erro': 'Hospedagem não encontrada'}), 404
+    return jsonify(hospedagem.to_dict())
+
+
+
+@app.route('/api/restaurantes', methods=['GET'])
+def get_restaurantes():
+    restaurantes = Restaurante.query.all()
+    return jsonify([restaurante.to_dict() for restaurante in restaurantes])
+
+@app.route('/api/restaurantes/<int:id>', methods=['GET'])
+def get_restaurantes(id):
+    restaurante = Restaurante.query.get(id)
+    if restaurante is None:
+        return jsonify({'erro': 'Restaurante não encontrada'}), 404
+    return jsonify(restaurante.to_dict())
+
+
+@app.route('/api/eventos', methods=['GET'])
+def get_eventos():
+    eventos = Evento.query.all()
+    return jsonify([evento.to_dict() for evento in eventos])
+
+@app.route('/api/eventos/<int:id>', methods=['GET'])
+def get_eventos(id):
+    evento = Evento.query.get(id)
+    if evento is None:
+        return jsonify({'erro': 'Evento não encontrada'}), 404
+    return jsonify(evento.to_dict())
+
+
 admin = Admin(app, name='Admin', template_mode='bootstrap3')
 admin.add_view(ModelView(PontoTuristico, db.session))
+admin.add_view(ModelView(Atividades, db.session))
+admin.add_view(ModelView(Evento, db.session))
+admin.add_view(ModelView(Restaurante, db.session))
+admin.add_view(ModelView(Hospedagem, db.session))
+admin.add_view(ModelView(Comentario, db.session))
 
 
 if __name__ == '__main__':
